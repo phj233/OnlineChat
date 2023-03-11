@@ -2,16 +2,12 @@ package info.phj233.onlinechat.handler;
 
 import info.phj233.onlinechat.util.ResultEnum;
 import info.phj233.onlinechat.util.ResultUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 /**
  * 登录失败处理类
@@ -26,7 +22,7 @@ import java.io.IOException;
 @Slf4j
 public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler {
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)  {
         switch (exception.getClass().getName()) {
             case "UsernameNotFoundException" -> {
                 log.info("【登录失败】" + exception.getMessage());

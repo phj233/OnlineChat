@@ -2,14 +2,11 @@ package info.phj233.onlinechat.handler;
 
 import info.phj233.onlinechat.util.ResultEnum;
 import info.phj233.onlinechat.util.ResultUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 /**
  * 暂无权限处理类
@@ -23,7 +20,7 @@ import java.io.IOException;
 @Component
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) {
         ResultUtil.error(ResultEnum.FORBIDDEN, "暂无权限");
     }
 }
