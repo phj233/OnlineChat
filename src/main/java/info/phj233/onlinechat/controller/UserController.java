@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-public class LoginAndRegisterController {
+public class UserController {
     private final LoginAndRegisterService loginAndRegisterService;
     //注册
     @PostMapping("/register")
