@@ -8,10 +8,7 @@ import info.phj233.onlinechat.util.ResultUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @projectName: OnlineChat
@@ -25,15 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-    private final UserService loginAndRegisterService;
+    private final UserService UserService;
     //注册
     @PostMapping("/register")
-    public Result<Object> register(User user){
+    public Result<Object> register(@RequestBody User user){
         if(user.getUsername().isEmpty()||user.getPassword().isEmpty()){
             return ResultUtil.error(ResultEnum.PARAMS_ERROR, "用户名或密码不能为空");
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        if (loginAndRegisterService.register(user)){
+        if (UserService.register(user)){
             return ResultUtil.success("注册成功");
         }else {
             return ResultUtil.error(ResultEnum.OPERATION_ERROR, "注册失败");
@@ -44,7 +41,7 @@ public class UserController {
 //        if(user.getUsername().isEmpty()||user.getPassword().isEmpty()){
 //            return ResultUtil.error(ResultEnum.PARAMS_ERROR, "用户名或密码不能为空");
 //        }
-//        if (loginAndRegisterService.login(user)){
+//        if (UserService.login(user)){
 //            return ResultUtil.success("登录成功");
 //        }else {
 //            return ResultUtil.error(ResultEnum.OPERATION_ERROR, "登录失败");
