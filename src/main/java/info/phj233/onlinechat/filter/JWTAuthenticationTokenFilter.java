@@ -3,22 +3,21 @@ package info.phj233.onlinechat.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import info.phj233.onlinechat.config.JWTConfig;
-import info.phj233.onlinechat.model.dto.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.AuthenticationManager;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @projectName: OnlineChat
@@ -28,37 +27,37 @@ import java.util.List;
  * @date: 2023/3/11 12:03
  * @version: 1.0
  */
-public class JWTAuthenticationTokenFilter extends BasicAuthenticationFilter {
-    public JWTAuthenticationTokenFilter(AuthenticationManager authenticationManager) {
-        super(authenticationManager);
-    }
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
+
+    final private UserDetailsService userDetailsService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         // 获取请求头中的token
         String tokenHeader = request.getHeader(JWTConfig.tokenHeader);
+        // 如果请求头中有token且开头为指定字符串
         if (tokenHeader != null && tokenHeader.startsWith(JWTConfig.tokenPrefix)) {
             try {
                 // 截取JWT前缀
                 String token = tokenHeader.replace(JWTConfig.tokenPrefix, "");
                 // 解析JWT 获取用户名、密码
                 String username = JWT.decode(token).getClaim("username").asString();
-                String uid = JWT.decode(token).getClaim("uid").asString();
-                if (!ObjectUtils.isEmpty(username) && !ObjectUtils.isEmpty(uid)) {
+                //如果用户名不为空且SecurityContext中没有认证信息，则进行认证
+                if (!ObjectUtils.isEmpty(username) && !ObjectUtils.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
+                    // 从UserDetailService获取用户信息
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                     // 获取用户权限
-                    String authorities = JWT.decode(token).getClaim("authorities").asString();
+                    String authorities = userDetails.getAuthorities().toString();
                     if (!ObjectUtils.isEmpty(authorities)) {
-                        // 将权限封装到List中
-                        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-                        String[] authority = authorities.split(",");
-                        for (String s : authority) {
-                            grantedAuthorities.add(new SimpleGrantedAuthority(s));
+                        //判断token是否有效
+                        if (JWT.decode(token).getExpiresAt().getTime() < System.currentTimeMillis()) {
+                            log.info("token已过期");
+                            throw new RuntimeException("token已过期");
                         }
-                        // 将用户信息和权限封装到Authentication中
-                        User user = new User();
-                        user.setUsername(username);
-                        user.setUid(Integer.valueOf(uid));
-                        user.setRole(grantedAuthorities.toString());
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, uid, grantedAuthorities);
+                        // 将权限封装到List中
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }

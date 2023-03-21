@@ -19,15 +19,15 @@ public class JWTConfig {
     /**
      * 过期时间30分钟
      */
-    public static Long expiration;
+    public static Long expiration = 30L;
     /**
      * Token前缀
      */
-    public static String tokenPrefix;
+    public static String tokenPrefix = "Bearer ";
     /**
      * TokenKey
      */
-    public static String tokenHeader;
+    public static String tokenHeader = "Authorization";
     /**
      * 不需要认证的路径
      */
