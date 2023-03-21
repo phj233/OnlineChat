@@ -1,7 +1,8 @@
 package info.phj233.onlinechat.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import info.phj233.onlinechat.config.JWTConfig;
-import info.phj233.onlinechat.model.dto.User;
+import info.phj233.onlinechat.model.UserDetailImpl;
 import info.phj233.onlinechat.util.JWTUtil;
 import info.phj233.onlinechat.util.ResultUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,14 +26,15 @@ import java.util.Map;
  */
 @Component
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
+    ObjectMapper objectMapper = new ObjectMapper();
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        String token = JWTUtil.generateToken(user);
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+        UserDetailImpl user = (UserDetailImpl) authentication.getPrincipal();
+        String token = JWTUtil.generateToken(user.getUser());
         token = JWTConfig.tokenPrefix + token;
         Map<String,Object> result = new HashMap<>();
         result.put("token", token);
-        ResultUtil.success(result);
+        response.getWriter().write(objectMapper.writeValueAsString(ResultUtil.success(result)));
 
     }
 }

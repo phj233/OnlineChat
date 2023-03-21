@@ -1,5 +1,6 @@
 package info.phj233.onlinechat.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import info.phj233.onlinechat.util.ResultEnum;
 import info.phj233.onlinechat.util.ResultUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * 登录失败处理类
@@ -21,24 +24,39 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler {
+    ObjectMapper objectMapper = new ObjectMapper();
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)  {
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         switch (exception.getClass().getName()) {
             case "UsernameNotFoundException" -> {
                 log.info("【登录失败】" + exception.getMessage());
-                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "用户不存在");
-            }
+                response.getWriter().write(
+                        objectMapper.writeValueAsString(
+                                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "用户不存在")
+                        )
+                );}
             case "BadCredentialsException" -> {
                 log.info("【登录失败】" + exception.getMessage());
-                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "密码错误");
+                response.getWriter().write(
+                        objectMapper.writeValueAsString(
+                                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "密码错误")
+                        )
+                );
             }
             case "LockedException" -> {
                 log.info("【登录失败】" + exception.getMessage());
-                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "账户被锁定");
+                response.getWriter().write(
+                        objectMapper.writeValueAsString(
+                                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "账户被锁定")
+                        )
+                );
             }
             default -> {
                 log.info("【登录失败】" + exception.getMessage());
-                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "登录失败");
+                response.getWriter().write(
+                        objectMapper.writeValueAsString(
+                                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "登录失败")
+                        ));
             }
         }
     }

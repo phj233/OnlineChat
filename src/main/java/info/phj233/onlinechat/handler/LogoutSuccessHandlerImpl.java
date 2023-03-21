@@ -1,5 +1,6 @@
 package info.phj233.onlinechat.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import info.phj233.onlinechat.util.ResultUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -7,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * 退出成功处理类
@@ -22,9 +25,15 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     /**
      * 用户退出返回结果，同时让前端清除token
      */
+    ObjectMapper objectMapper = new ObjectMapper();
     @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         SecurityContextHolder.clearContext();
-        ResultUtil.success("退出成功");
+        response.getWriter().write(
+                objectMapper.writeValueAsString(
+                        ResultUtil.success("退出成功")
+                )
+        );
+
     }
 }
