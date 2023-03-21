@@ -1,17 +1,14 @@
 package info.phj233.onlinechat.service.impl;
 
 import info.phj233.onlinechat.dao.UserDao;
+import info.phj233.onlinechat.model.UserDetailImpl;
 import info.phj233.onlinechat.model.dto.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
-import java.util.Collection;
 
 /**
  * @projectName: OnlineChat
@@ -31,7 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (ObjectUtils.isEmpty(user)) {
             throw new UsernameNotFoundException("用户不存在");
         }
-        return new org.springframework.security.core.userdetails
-                .User(user.getUsername(), user.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(user.getRole()));
+        return new UserDetailImpl(user);
     }
 }

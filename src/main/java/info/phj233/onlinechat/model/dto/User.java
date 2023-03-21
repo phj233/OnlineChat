@@ -46,6 +46,12 @@ public class User implements Serializable {
     @Column(name = "role")
     private String role;
 
+    /**
+     * 用户是否启用
+     */
+    @Column(name = "enabled")
+    private Boolean enabled;
+
     @Serial
     private static final long serialVersionUID = 1L;
 }
