@@ -2,7 +2,7 @@ package info.phj233.onlinechat.evaluator;
 
 import info.phj233.onlinechat.dao.UserDao;
 import info.phj233.onlinechat.model.dto.User;
-import lombok.RequiredArgsConstructor;
+import jakarta.annotation.Resource;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -20,9 +20,9 @@ import java.util.Set;
  * @version: 1.0
  */
 @Component
-@RequiredArgsConstructor
 public class SelfPermissionEvaluatorImpl implements PermissionEvaluator {
-    private final UserDao userDao;
+    @Resource
+    private UserDao userDao;
     /**
      * 判断用户是否有权限
      * 这里仅仅判断 PreAuthorize 注解中的权限表达式
