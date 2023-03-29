@@ -49,7 +49,7 @@ public class User implements Serializable {
     /**
      * 用户是否启用
      */
-    @Column(name = "enabled")
+    @Column(name = "enabled", columnDefinition = "bit(1) default 1")
     private Boolean enabled;
 
     @Serial

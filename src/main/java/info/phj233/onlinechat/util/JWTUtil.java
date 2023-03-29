@@ -36,6 +36,7 @@ public class JWTUtil {
                 .withIssuer("phj233")
                 .withIssuedAt(new Date())
                 .withJWTId(String.valueOf(user.getUid()))
+                .withClaim("username", user.getUsername())
                 .withClaim("authorities", user.getRole())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JWTConfig.expiration * 1000 * 60))
                 .sign(Algorithm.RSA256(publicKey, privateKey));

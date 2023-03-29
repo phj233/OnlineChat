@@ -43,20 +43,25 @@ public class SecurityConfig {
         handler.setPermissionEvaluator(new SelfPermissionEvaluatorImpl());
         return handler;
     }
-
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                // 关闭csrf
+                .csrf().disable()
+                // 基于token，所以不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .exceptionHandling()
+                // 配置无权限自定义处理类
+                .accessDeniedHandler(accessDeniedHandler)
+                // 配置未登录自定义处理类
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/user/register").permitAll()
+                        .requestMatchers("/login","/user/register").permitAll()
+                        .anyRequest().authenticated()
                 )
                 // security提交form表单请求的接口地址 默认是/login/userLogin
-                // 配置未登录自定义处理类
-                .httpBasic().authenticationEntryPoint(authenticationEntryPoint)
-                .and()
                 // 添加JWT过滤器
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(userDetailsService)
@@ -69,12 +74,7 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 // 配置退出成功自定义处理类
-                .logoutSuccessHandler(logoutSuccessHandler)
-                .and()
-                // 配置没有权限自定义处理类
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
-                .and()
-                .headers().cacheControl();
+                .logoutSuccessHandler(logoutSuccessHandler);
         return http.build();
     }
 

@@ -13,5 +13,4 @@ import info.phj233.onlinechat.model.dto.User;
  */
 public interface UserService {
     Boolean register(User user);
-    Boolean login(User user);
 }

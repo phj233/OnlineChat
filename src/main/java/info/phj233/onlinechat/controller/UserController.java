@@ -6,7 +6,7 @@ import info.phj233.onlinechat.util.Result;
 import info.phj233.onlinechat.util.ResultEnum;
 import info.phj233.onlinechat.util.ResultUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,22 +36,11 @@ public class UserController {
             return ResultUtil.error(ResultEnum.OPERATION_ERROR, "注册失败");
         }
     }
-//    @PostMapping("/login")
-//    public Result<Object> login(User user) {
-//        if(user.getUsername().isEmpty()||user.getPassword().isEmpty()){
-//            return ResultUtil.error(ResultEnum.PARAMS_ERROR, "用户名或密码不能为空");
-//        }
-//        if (UserService.login(user)){
-//            return ResultUtil.success("登录成功");
-//        }else {
-//            return ResultUtil.error(ResultEnum.OPERATION_ERROR, "登录失败");
-//        }
-//    }
 
     @GetMapping("/info")
-    public Result<Object> info() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResultUtil.success(user);
+    public Result<Object> info(Authentication authentication) {
+        Object principal = authentication.getPrincipal();
+        return ResultUtil.success(principal);
     }
 
 

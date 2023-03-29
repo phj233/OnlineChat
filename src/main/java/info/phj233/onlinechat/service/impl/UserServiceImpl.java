@@ -27,9 +27,4 @@ public class UserServiceImpl implements UserService {
         userDao.save(user);
         return true;
     }
-
-    @Override
-    public Boolean login(User user) {
-        return userDao.findUserByUsername(user.getUsername()) != null;
-    }
 }
