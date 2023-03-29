@@ -1,6 +1,6 @@
 package info.phj233.onlinechat.provider;
 
-import info.phj233.onlinechat.dao.UserDao;
+import info.phj233.onlinechat.model.UserDetailImpl;
 import info.phj233.onlinechat.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,15 +9,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * 自定义登录验证类
@@ -32,7 +29,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthenticationProviderImpl implements AuthenticationProvider {
     private final UserDetailsServiceImpl userDetailsService;
-    private final UserDao userDao;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -40,7 +36,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         String username = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
         // 通过用户名查询用户信息
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetailImpl userDetails = (UserDetailImpl) userDetailsService.loadUserByUsername(username);
         if (ObjectUtils.isEmpty(userDetails)) {
             throw new UsernameNotFoundException("用户不存在");
         }
@@ -49,11 +45,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
             throw new BadCredentialsException("密码错误");
         }
         // 获取用户权限
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        String[] roles = userDao.findUserByUsername(username).getRole().split(",");
-        for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-        }
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         // 将用户信息和权限封装到Authentication中
         return new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
     }
