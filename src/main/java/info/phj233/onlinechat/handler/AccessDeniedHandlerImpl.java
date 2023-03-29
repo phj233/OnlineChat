@@ -1,6 +1,8 @@
 package info.phj233.onlinechat.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import info.phj233.onlinechat.util.ResultEnum;
+import info.phj233.onlinechat.util.ResultUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,9 +25,10 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(
                 objectMapper.writeValueAsString(
-                        "暂无权限"
+                        ResultUtil.error(ResultEnum.NO_AUTH, "暂无权限")
                 ));
     }
 }

@@ -25,6 +25,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(
                 objectMapper.writeValueAsString(
                         ResultUtil.error(ResultEnum.NOT_LOGIN, "用户未登录")

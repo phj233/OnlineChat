@@ -27,6 +27,7 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
     ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
+        response.setCharacterEncoding("UTF-8");
         switch (exception.getClass().getName()) {
             case "UsernameNotFoundException" -> {
                 log.info("【登录失败】" + exception.getMessage());

@@ -7,6 +7,7 @@ import info.phj233.onlinechat.util.JWTUtil;
 import info.phj233.onlinechat.util.ResultUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -25,10 +26,12 @@ import java.util.Map;
  * @version: 1.0
  */
 @Component
+@Slf4j
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
     ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+        response.setCharacterEncoding("UTF-8");
         UserDetailImpl user = (UserDetailImpl) authentication.getPrincipal();
         String token = JWTUtil.generateToken(user.getUser());
         token = JWTConfig.tokenPrefix + token;
