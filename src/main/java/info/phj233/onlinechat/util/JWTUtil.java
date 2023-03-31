@@ -3,7 +3,7 @@ package info.phj233.onlinechat.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import info.phj233.onlinechat.config.JWTConfig;
-import info.phj233.onlinechat.model.dto.User;
+import info.phj233.onlinechat.model.User;
 import lombok.NoArgsConstructor;
 
 import java.security.KeyPair;
