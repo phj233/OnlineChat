@@ -1,7 +1,7 @@
 package info.phj233.onlinechat.evaluator;
 
 import info.phj233.onlinechat.dao.UserDao;
-import info.phj233.onlinechat.model.dto.User;
+import info.phj233.onlinechat.model.User;
 import jakarta.annotation.Resource;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;

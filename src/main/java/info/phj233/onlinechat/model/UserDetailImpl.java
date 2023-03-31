@@ -1,6 +1,5 @@
 package info.phj233.onlinechat.model;
 
-import info.phj233.onlinechat.model.dto.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

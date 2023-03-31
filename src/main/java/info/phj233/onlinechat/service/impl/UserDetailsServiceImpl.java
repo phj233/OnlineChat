@@ -2,7 +2,7 @@ package info.phj233.onlinechat.service.impl;
 
 import info.phj233.onlinechat.dao.UserDao;
 import info.phj233.onlinechat.model.UserDetailImpl;
-import info.phj233.onlinechat.model.dto.User;
+import info.phj233.onlinechat.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
