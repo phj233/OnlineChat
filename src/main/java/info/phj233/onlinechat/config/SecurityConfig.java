@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login","/user/register").permitAll()
+                        .requestMatchers("/login","/user/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // security提交form表单请求的接口地址 默认是/login/userLogin

@@ -9,6 +9,9 @@ package info.phj233.onlinechat.exception;
  * @version: 1.0
  */
 public class LoginException extends RuntimeException{
+    public LoginException(String message) {
+        super(message);
+    }
     public LoginException(String message, Throwable cause) {
         super(message, cause);
     }
