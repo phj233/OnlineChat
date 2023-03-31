@@ -1,6 +1,6 @@
 package info.phj233.onlinechat.service;
 
-import info.phj233.onlinechat.model.dto.User;
+import info.phj233.onlinechat.model.dto.UserDTO;
 
 
 /**
@@ -12,5 +12,6 @@ import info.phj233.onlinechat.model.dto.User;
  * @version: 1.0
  */
 public interface UserService {
-    Boolean register(User user);
+    Boolean register(UserDTO user);
+    Boolean checkToken(String token);
 }

@@ -1,7 +1,10 @@
 package info.phj233.onlinechat.service.impl;
 
+import com.auth0.jwt.JWT;
+import info.phj233.onlinechat.config.JWTConfig;
 import info.phj233.onlinechat.dao.UserDao;
-import info.phj233.onlinechat.model.dto.User;
+import info.phj233.onlinechat.model.User;
+import info.phj233.onlinechat.model.dto.UserDTO;
 import info.phj233.onlinechat.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,11 +23,20 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     @Override
-    public Boolean register(User user) {
+    public Boolean register(UserDTO user) {
         if (userDao.findUserByUsername(user.getUsername()) != null) {
             return false;
         }
-        userDao.save(user);
+        User userVO = new User(user);
+        userDao.save(userVO);
         return true;
+    }
+
+    @Override
+    public Boolean checkToken(String token) {
+        if (token.startsWith(JWTConfig.tokenPrefix)){
+            token = token.replace(JWTConfig.tokenPrefix, "");
+        }
+        return JWT.decode(token).getExpiresAt().getTime() < System.currentTimeMillis();
     }
 }
