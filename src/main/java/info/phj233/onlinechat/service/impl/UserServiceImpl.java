@@ -7,6 +7,10 @@ import info.phj233.onlinechat.model.User;
 import info.phj233.onlinechat.model.dto.UserDTO;
 import info.phj233.onlinechat.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -37,6 +41,29 @@ public class UserServiceImpl implements UserService {
         if (token.startsWith(JWTConfig.tokenPrefix)){
             token = token.replace(JWTConfig.tokenPrefix, "");
         }
-        return JWT.decode(token).getExpiresAt().getTime() < System.currentTimeMillis();
+        return JWT.decode(token).getExpiresAt().getTime() > System.currentTimeMillis();
+    }
+
+    @Override
+    public Boolean deleteById(Integer id) {
+        try {
+            userDao.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public User updateUser(User user) {
+        return userDao.save(user);
+    }
+
+    @Override
+    public Page<User> pagefindAll(Integer page, Integer size) {//排序
+        Sort sort = Sort.by(Sort.Direction.ASC, "uid");
+        //分页
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return userDao.findAll(pageable);
     }
 }

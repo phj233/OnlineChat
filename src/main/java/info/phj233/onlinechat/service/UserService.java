@@ -1,6 +1,8 @@
 package info.phj233.onlinechat.service;
 
+import info.phj233.onlinechat.model.User;
 import info.phj233.onlinechat.model.dto.UserDTO;
+import org.springframework.data.domain.Page;
 
 
 /**
@@ -14,4 +16,10 @@ import info.phj233.onlinechat.model.dto.UserDTO;
 public interface UserService {
     Boolean register(UserDTO user);
     Boolean checkToken(String token);
+
+    Boolean deleteById(Integer id);
+
+    User updateUser(User user);
+
+    Page<User> pagefindAll(Integer page, Integer size);
 }
