@@ -58,7 +58,7 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
                 Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
                 if (!ObjectUtils.isEmpty(authorities)) {
                     //判断token是否有效
-                    if (userService.checkToken(token)) {
+                    if (!userService.checkToken(token)) {
                         log.info("token已过期");
                         response.setCharacterEncoding("UTF-8");
                         response.getWriter().write(
