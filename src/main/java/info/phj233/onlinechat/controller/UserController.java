@@ -1,6 +1,7 @@
 package info.phj233.onlinechat.controller;
 
 import info.phj233.onlinechat.config.JWTConfig;
+import info.phj233.onlinechat.model.UserDetailImpl;
 import info.phj233.onlinechat.model.dto.UserDTO;
 import info.phj233.onlinechat.service.UserService;
 import info.phj233.onlinechat.util.Result;
@@ -12,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @projectName: OnlineChat
@@ -30,7 +34,6 @@ public class UserController {
     //注册
     @PostMapping("/register")
     public Result<Object> register(@RequestBody UserDTO user){
-        System.out.println(user);
         try {
             if(ObjectUtils.isEmpty(user.getUsername()) || ObjectUtils.isEmpty(user.getPassword())){
                 return ResultUtil.error(ResultEnum.PARAMS_ERROR, "用户名或密码不能为空");
@@ -45,25 +48,37 @@ public class UserController {
             return ResultUtil.error(ResultEnum.OPERATION_ERROR, e.getMessage());
         }
     }
-
+    @GetMapping("/test")
+    public Result<Object> test() {
+        return ResultUtil.success("测试成功");
+    }
     @GetMapping("/info")
     public Result<Object> info(Authentication authentication) {
         if (authentication == null) {
             return ResultUtil.error(ResultEnum.OPERATION_ERROR, "未登录");
         }
-        Object principal = authentication.getPrincipal();
-        return ResultUtil.success(principal);
+        UserDetailImpl user = (UserDetailImpl) authentication.getPrincipal();
+        Map<String, Object> map = new HashMap<>();
+        map.put("userinfo", user.getUser());
+        map.put("roles", user.getAuthorities());
+        return ResultUtil.success(map);
     }
-
     @GetMapping("/checktoken")
     public Result<Object> checktoken(HttpServletRequest request) {
         String token = request.getHeader(JWTConfig.tokenHeader);
-        if (UserService.checkToken(token)) {
+        if (!UserService.checkToken(token)) {
             return ResultUtil.error(ResultEnum.FORBIDDEN, "token已过期");
         }else {
             return ResultUtil.success("token未过期");
         }
 
+    }
+
+    //分页
+    @GetMapping("/page")
+    public Result<Object> pagefindAll(@RequestParam(value = "page", defaultValue = "2") Integer page,
+                                      @RequestParam(value = "size", defaultValue = "1") Integer size) {
+        return ResultUtil.success(UserService.pagefindAll(page, size));
     }
 
 

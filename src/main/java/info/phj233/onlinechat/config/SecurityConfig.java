@@ -58,6 +58,8 @@ public class SecurityConfig {
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                 .authorizeHttpRequests(auth -> auth
+                        //放行knife4j
+                        .requestMatchers("/doc.html","/webjars/**","/swagger-resources/**","/v3/api-docs/**").permitAll()
                         .requestMatchers("/login","/user/**").permitAll()
                         .anyRequest().authenticated()
                 )
