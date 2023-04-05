@@ -37,6 +37,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         token = JWTConfig.tokenPrefix + token;
         Map<String,Object> result = new HashMap<>();
         result.put("token", token);
+        result.put("userinfo", user.getUser());
         response.getWriter().write(objectMapper.writeValueAsString(ResultUtil.success(result)));
 
     }
