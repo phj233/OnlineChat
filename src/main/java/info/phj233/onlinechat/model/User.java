@@ -54,6 +54,9 @@ public class User implements Serializable {
     @Column(name = "enabled", columnDefinition = "bit(1) default 1")
     private Boolean enabled;
 
+    @Column(name = "avatar", columnDefinition = "varchar(255) default 'user.png'")
+    private String avatar;
+
     @Serial
     private static final long serialVersionUID = 1L;
 

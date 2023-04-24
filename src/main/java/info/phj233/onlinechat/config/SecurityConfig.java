@@ -59,8 +59,14 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(auth -> auth
                         //放行knife4j
-                        .requestMatchers("/doc.html","/webjars/**","/swagger-resources/**","/v3/api-docs/**").permitAll()
-                        .requestMatchers("/login","/user/**").permitAll()
+                        .requestMatchers(
+                                "/doc.html",
+                                "/webjars/**",
+                                "/swagger-resources/**",
+                                "/v3/api-docs/**",
+                                "/upload/**",
+                                "/login",
+                                "/user/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // security提交form表单请求的接口地址 默认是/login/userLogin
