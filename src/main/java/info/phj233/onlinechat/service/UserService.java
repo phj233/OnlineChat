@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserService {
     Boolean register(UserDTO user);
 
+    Boolean addUser(User user);
+
     Boolean checkToken(String token);
 
     Boolean deleteById(Integer id);

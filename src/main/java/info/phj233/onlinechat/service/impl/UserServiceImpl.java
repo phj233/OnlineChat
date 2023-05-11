@@ -44,6 +44,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean addUser(User user) {
+        if (userDao.findUserByUsername(user.getUsername()) != null) {
+            return false;
+        }
+        try {
+            userDao.save(user);
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+    }
+    @Override
     public Boolean checkToken(String token) {
         if (token.startsWith(JWTConfig.tokenPrefix)){
             token = token.replace(JWTConfig.tokenPrefix, "");
