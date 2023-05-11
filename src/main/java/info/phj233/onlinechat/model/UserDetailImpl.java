@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
 /**
+ * 用户信息
  * @projectName: OnlineChat
  * @package: info.phj233.onlinechat.service.impl
  * @className: UserDetailImpl

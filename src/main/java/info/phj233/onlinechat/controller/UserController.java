@@ -38,6 +38,7 @@ public class UserController {
      * 注册
      * @param user 用户UserDTO
      * @return Result
+     * @see UserDTO
      */
     @PostMapping("/register")
     public Result<Object> register(@RequestBody UserDTO user){
@@ -106,6 +107,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('admin','user')")
     @PostMapping("/update")
     public Result<Object> update(@RequestBody User user) {
+
         try {
             if(ObjectUtils.isEmpty(user.getUsername()) || ObjectUtils.isEmpty(user.getPassword())){
                 return ResultUtil.error(ResultEnum.PARAMS_ERROR, "用户名或密码不能为空");

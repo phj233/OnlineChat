@@ -12,12 +12,9 @@ import java.util.Set;
 
 /**
  * 自定义权限注解验证类
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.evaluator
- * @className: SelfPermissionEvaluatorImpl
- * @author: phj233
- * @date: 2023/3/12 22:15
- * @version: 1.0
+ * @author phj233
+ * @since  2023/3/12 22:15
+ * @version 1.0
  */
 @Component
 public class SelfPermissionEvaluatorImpl implements PermissionEvaluator {
