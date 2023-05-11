@@ -8,6 +8,7 @@ import info.phj233.onlinechat.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,15 +19,13 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.config
- * @className: SecurityConfig
- * @author: phj233
- * @date: 2023/3/10 14:06
- * @version: 1.0
+ * Security配置类
+ * @author phj233
+ * @since  2023/3/10 14:06
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity // 开启方法级别的权限认证
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthenticationSuccessHandlerImpl authenticationSuccessHandler;
@@ -66,12 +65,16 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/upload/**",
                                 "/login",
-                                "/user/**").permitAll()
+                                "/user/register",
+                                "/user/info",
+                                "/user/checktoken",
+                        "/user/avatar").permitAll()
                         .anyRequest().authenticated()
                 )
-                // security提交form表单请求的接口地址 默认是/login/userLogin
+                // security提交form表单请求的接口地址 默认是/login
                 // 添加JWT过滤器
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                // 允许添加额外的用户详细信息服务以供使用
                 .userDetailsService(userDetailsService)
                 .authenticationProvider(authenticationProvider)
                 .formLogin()
