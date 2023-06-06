@@ -60,6 +60,7 @@ public class SecurityConfig {
                         //放行knife4j
                         .requestMatchers(
                                 "/doc.html",
+                                "/chat",
                                 "/webjars/**",
                                 "/swagger-resources/**",
                                 "/v3/api-docs/**",
