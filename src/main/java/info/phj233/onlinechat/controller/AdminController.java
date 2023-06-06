@@ -3,12 +3,12 @@ package info.phj233.onlinechat.controller;
 import info.phj233.onlinechat.dao.UserDao;
 import info.phj233.onlinechat.model.User;
 import info.phj233.onlinechat.service.UserService;
-import info.phj233.onlinechat.util.Result;
-import info.phj233.onlinechat.util.ResultEnum;
-import info.phj233.onlinechat.util.ResultUtil;
+import info.phj233.onlinechat.util.result.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @projectName: OnlineChat
@@ -24,24 +24,16 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     private final UserDao userDao;
     private final UserService userService;
-    @PreAuthorize("hasAuthority('ROLE_admin')")
+    @PreAuthorize("hasAuthority('admin')")
     @GetMapping("/list")
-    public Result<Object> list() {
-        return ResultUtil.success(userDao.findAll());
+    public R<List<User>> list() {
+        return R.ok(userDao.findAll());
     }
 
     @PreAuthorize("hasPermission('/admin/addUser', 'admin')")
     @PostMapping("/addUser")
-    public Result<Object> addUser(@RequestBody User user) {
-        try {
-            if ( userService.addUser(user) ) {
-                return ResultUtil.success("添加成功");
-            } else {
-                return ResultUtil.error(ResultEnum.OPERATION_ERROR);
-            }
-        }catch (Exception e) {
-            return ResultUtil.error(ResultEnum.OPERATION_ERROR, e.getMessage());
-        }
+    public R<User> addUser(@RequestBody User user) {
+        return userService.addUser(user);
     }
 
 }

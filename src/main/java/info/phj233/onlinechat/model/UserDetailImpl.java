@@ -11,12 +11,9 @@ import java.util.*;
 
 /**
  * 用户信息
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.service.impl
- * @className: UserDetailImpl
- * @author: phj233
- * @date: 2023/3/21 23:06
- * @version: 1.0
+ * @author phj233
+ * @since  2023/3/21 23:06
+ * @version 1.0
  */
 @Data
 @NoArgsConstructor
@@ -28,7 +25,7 @@ public class UserDetailImpl implements UserDetails {
         Set<GrantedAuthority> authorities = new HashSet<>();
         String[] roles = user.getRole().split(",");
         for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+            authorities.add(new SimpleGrantedAuthority(role));
         }
         return authorities;
     }

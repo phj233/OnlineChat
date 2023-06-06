@@ -1,6 +1,5 @@
 package info.phj233.onlinechat.model;
 
-import info.phj233.onlinechat.model.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,7 @@ public class User implements Serializable {
      * 用户uid
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "uid")
     private Integer uid;
     /**
@@ -59,13 +58,5 @@ public class User implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    public User(UserDTO userDTO) {
-        this.username = userDTO.getUsername();
-        this.password = userDTO.getPassword();
-        this.email = userDTO.getEmail();
-        this.role = "user";
-        this.enabled = true;
-    }
 
 }

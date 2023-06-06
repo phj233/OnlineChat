@@ -12,12 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 /**
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.service.impl
- * @className: UserDetailsServiceImpl
- * @author: phj233
- * @date: 2023/3/10 17:59
- * @version: 1.0
+ * @author phj233
+ * @since  2023/3/10 17:59
+ * @version 1.0
  */
 @Service
 @RequiredArgsConstructor

@@ -1,7 +1,8 @@
 package info.phj233.onlinechat.service;
 
 import info.phj233.onlinechat.model.User;
-import info.phj233.onlinechat.model.dto.UserDTO;
+import info.phj233.onlinechat.model.value.Register;
+import info.phj233.onlinechat.util.result.R;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -17,17 +18,15 @@ import org.springframework.web.multipart.MultipartFile;
  * @version: 1.0
  */
 public interface UserService {
-    Boolean register(UserDTO user);
+    R<User> register(Register register);
 
-    Boolean addUser(User user);
+    R<User> addUser(User user);
 
     Boolean checkToken(String token);
 
-    Boolean deleteById(Integer id);
+    R<Page<User>>pagefindAll(Integer page, Integer size);
 
-    Page<User> pagefindAll(Integer page, Integer size);
+    R<User> update(User user);
 
-    Boolean update(User user);
-
-    Boolean updateAvatar(MultipartFile file, Authentication authentication, HttpServletRequest request);
+    R<Object> updateAvatar(MultipartFile file, Authentication authentication, HttpServletRequest request);
 }
