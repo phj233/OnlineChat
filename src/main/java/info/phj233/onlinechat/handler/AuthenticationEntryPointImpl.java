@@ -1,8 +1,8 @@
 package info.phj233.onlinechat.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import info.phj233.onlinechat.util.ResultEnum;
-import info.phj233.onlinechat.util.ResultUtil;
+import info.phj233.onlinechat.util.result.E;
+import info.phj233.onlinechat.util.result.R;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
@@ -28,7 +28,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(
                 objectMapper.writeValueAsString(
-                        ResultUtil.error(ResultEnum.NOT_LOGIN, "用户未登录")
+                        R.error(E.USER_NOT_LOGIN)
                 )
         );
     }

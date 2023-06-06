@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import info.phj233.onlinechat.config.JWTConfig;
 import info.phj233.onlinechat.model.UserDetailImpl;
 import info.phj233.onlinechat.util.JWTUtil;
-import info.phj233.onlinechat.util.ResultUtil;
+import info.phj233.onlinechat.util.result.R;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         Map<String,Object> result = new HashMap<>();
         result.put("token", token);
         result.put("userinfo", user.getUser());
-        response.getWriter().write(objectMapper.writeValueAsString(ResultUtil.success(result)));
+        response.getWriter().write(objectMapper.writeValueAsString(R.ok(result)));
 
     }
 }

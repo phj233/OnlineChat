@@ -6,8 +6,8 @@ import info.phj233.onlinechat.config.JWTConfig;
 import info.phj233.onlinechat.model.UserDetailImpl;
 import info.phj233.onlinechat.service.UserService;
 import info.phj233.onlinechat.service.impl.UserDetailsServiceImpl;
-import info.phj233.onlinechat.util.ResultEnum;
-import info.phj233.onlinechat.util.ResultUtil;
+import info.phj233.onlinechat.util.result.E;
+import info.phj233.onlinechat.util.result.R;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -63,7 +63,7 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
                         response.setCharacterEncoding("UTF-8");
                         response.getWriter().write(
                                 objectMapper.writeValueAsString(
-                                        ResultUtil.error(ResultEnum.FORBIDDEN, "token已过期")
+                                        R.error(E. TOKEN_EXPIRED)
                                 ));
                         return;
                     }

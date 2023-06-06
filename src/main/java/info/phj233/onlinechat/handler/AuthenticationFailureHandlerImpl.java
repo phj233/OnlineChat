@@ -1,8 +1,8 @@
 package info.phj233.onlinechat.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import info.phj233.onlinechat.util.ResultEnum;
-import info.phj233.onlinechat.util.ResultUtil;
+import info.phj233.onlinechat.util.result.E;
+import info.phj233.onlinechat.util.result.R;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -33,14 +33,14 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
                 log.info("【登录失败】" + exception.getMessage());
                 response.getWriter().write(
                         objectMapper.writeValueAsString(
-                                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "用户不存在")
+                                R.error(E.USER_NOT_EXIST)
                         )
                 );}
             case "BadCredentialsException" -> {
                 log.info("【登录失败】" + exception.getMessage());
                 response.getWriter().write(
                         objectMapper.writeValueAsString(
-                                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "密码错误")
+                                R.error(E.USERNAME_PASSWORD_ERROR)
                         )
                 );
             }
@@ -48,7 +48,7 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
                 log.info("【登录失败】" + exception.getMessage());
                 response.getWriter().write(
                         objectMapper.writeValueAsString(
-                                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "账户被锁定")
+                                R.error(E.USER_LOCKED)
                         )
                 );
             }
@@ -56,8 +56,10 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
                 log.info("【登录失败】" + exception.getMessage());
                 response.getWriter().write(
                         objectMapper.writeValueAsString(
-                                ResultUtil.error(ResultEnum.SYSTEM_ERROR, "登录失败")
-                        ));
+                                R.error(E.ERROR, exception.getMessage()
+                                )
+                        )
+                );
             }
         }
     }

@@ -2,7 +2,7 @@ package info.phj233.onlinechat.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.phj233.onlinechat.config.JWTConfig;
-import info.phj233.onlinechat.util.ResultUtil;
+import info.phj233.onlinechat.util.result.R;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -38,7 +38,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         response.setHeader(JWTConfig.tokenHeader, "");
         response.getWriter().write(
                 objectMapper.writeValueAsString(
-                        ResultUtil.success("退出成功")
+                        R.ok("退出成功")
                 )
         );
 
