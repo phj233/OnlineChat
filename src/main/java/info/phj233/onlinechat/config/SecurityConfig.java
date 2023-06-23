@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,16 +47,27 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 // 关闭csrf
-                .csrf().disable()
+                .csrf(AbstractHttpConfigurer::disable)
                 // 基于token，所以不需要session
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling()
-                // 配置无权限自定义处理类
-                .accessDeniedHandler(accessDeniedHandler)
-                // 配置未登录自定义处理类
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exception -> exception
+                        // 配置没有权限自定义处理类
+                        .accessDeniedHandler(accessDeniedHandler)
+                        // 配置没有登录自定义处理类
+                        .authenticationEntryPoint(authenticationEntryPoint))
+                //登录处理
+                .formLogin(login -> login
+                        // 配置登录页面
+                        .successHandler(authenticationSuccessHandler)
+                        // 配置登录失败页面
+                        .failureHandler(authenticationFailureHandler)
+                )
+                //登出处理
+                .logout(logout -> logout
+                        // 配置登出页面
+                        .logoutSuccessHandler(logoutSuccessHandler)
+                )
                 .authorizeHttpRequests(auth -> auth
                         //放行knife4j
                         .requestMatchers(
@@ -77,16 +89,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 允许添加额外的用户详细信息服务以供使用
                 .userDetailsService(userDetailsService)
-                .authenticationProvider(authenticationProvider)
-                .formLogin()
-                // 配置登录成功自定义处理类
-                .successHandler(authenticationSuccessHandler)
-                // 配置登录失败自定义处理类
-                .failureHandler(authenticationFailureHandler)
-                .and()
-                .logout()
-                // 配置退出成功自定义处理类
-                .logoutSuccessHandler(logoutSuccessHandler);
+                .authenticationProvider(authenticationProvider);
+
         return http.build();
     }
 
