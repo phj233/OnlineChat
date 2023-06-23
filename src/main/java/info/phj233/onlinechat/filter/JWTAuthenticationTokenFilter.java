@@ -62,6 +62,7 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
                     if (!userService.checkToken(token)) {
                         log.info("token已过期");
                         response.setCharacterEncoding("UTF-8");
+                        response.setContentType("application/json;charset=UTF-8");
                         response.getWriter().write(
                                 objectMapper.writeValueAsString(
                                         R.error(E. TOKEN_EXPIRED)

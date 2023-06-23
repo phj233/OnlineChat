@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 
 /**
@@ -29,18 +27,23 @@ public class JWTUtil {
      * @return token
      */
     public static String generateToken(User user) {
-        KeyPair keyPair = generateKeyPair();
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+//        KeyPair keyPair = generateKeyPair();
+//        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+//        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
         return JWT.create()
                 .withIssuer("phj233")
                 .withIssuedAt(new Date())
                 .withJWTId(String.valueOf(user.getUid()))
+                .withAudience(user.getUsername())
                 .withClaim("username", user.getUsername())
                 .withClaim("authorities", user.getRole())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JWTConfig.expiration * 1000 * 60))
-                .sign(Algorithm.RSA256(publicKey, privateKey));
+                .sign(Algorithm.HMAC256(JWTConfig.secret));
     }
+
+    /**
+     * @deprecated
+     */
     private static KeyPair generateKeyPair()  {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
