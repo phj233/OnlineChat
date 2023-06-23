@@ -13,11 +13,8 @@ import java.io.IOException;
 
 /**
  * 用户未登录处理类
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.handler
- * @className: AuthenticationEntryPointImpl
- * @author: phj233
- * @date: 2023/3/10 22:44
+ * @author phj233
+ * @since  2023/3/10 22:44
  * @version: 1.0
  */
 @Component
@@ -26,6 +23,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(
                 objectMapper.writeValueAsString(
                         R.error(E.USER_NOT_LOGIN)

@@ -2,6 +2,7 @@ package info.phj233.onlinechat.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.phj233.onlinechat.config.JWTConfig;
+import info.phj233.onlinechat.util.result.E;
 import info.phj233.onlinechat.util.result.R;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,12 +16,9 @@ import java.io.IOException;
 
 /**
  * 退出成功处理类
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.handler
- * @className: LogoutSuccessHandlerImpl
- * @author: phj233
- * @date: 2023/3/11 12:00
- * @version: 1.0
+ * @author phj233
+ * @since  2023/3/11 12:00
+ * @version 1.0
  */
 @Component
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
@@ -34,11 +32,12 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
         response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         SecurityContextHolder.clearContext();
         response.setHeader(JWTConfig.tokenHeader, "");
         response.getWriter().write(
                 objectMapper.writeValueAsString(
-                        R.ok("退出成功")
+                        R.ok(E.SUCCESS)
                 )
         );
 

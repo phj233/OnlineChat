@@ -18,12 +18,9 @@ import java.util.Map;
 
 /**
  * 登录成功处理类
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.handler
- * @className: AuthenticationSuccessHandlerImpl
- * @author: phj233
- * @date: 2023/3/10 22:58
- * @version: 1.0
+ * @author phj233
+ * @since  2023/3/10 22:58
+ * @version 1.0
  */
 @Component
 @Slf4j
@@ -32,6 +29,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         UserDetailImpl user = (UserDetailImpl) authentication.getPrincipal();
         String token = JWTUtil.generateToken(user.getUser());
         token = JWTConfig.tokenPrefix + token;

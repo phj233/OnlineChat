@@ -14,12 +14,9 @@ import java.io.IOException;
 
 /**
  * 登录失败处理类
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.handler
- * @className: AuthenticationFailureHandlerImpl
- * @author: phj233
- * @date: 2023/3/10 22:46
- * @version: 1.0
+ * @author phj233
+ * @since  2023/3/10 22:46
+ * @version 1.0
  */
 @Component
 @Slf4j
