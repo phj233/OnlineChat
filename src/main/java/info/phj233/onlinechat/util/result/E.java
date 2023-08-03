@@ -8,7 +8,7 @@ import lombok.Getter;
  */
 @Getter
 public enum E {
-    SUCCESS(200, "成功"),
+    SUCCESS(0, "成功"),
     USERNAME_PASSWORD_EMPTY(400, "用户名或密码为空"),
     USERNAME_PASSWORD_ERROR(400, "用户名或密码错误"),
     USERNAME_ALREADY_EXIST(400, "用户名已存在"),

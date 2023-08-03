@@ -5,6 +5,7 @@ import info.phj233.onlinechat.model.User;
 import info.phj233.onlinechat.model.UserDetailImpl;
 import info.phj233.onlinechat.model.value.Register;
 import info.phj233.onlinechat.service.UserService;
+import info.phj233.onlinechat.util.JWTUtil;
 import info.phj233.onlinechat.util.result.E;
 import info.phj233.onlinechat.util.result.R;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +32,6 @@ public class UserController {
     private final UserService userService;
     /**
      * 注册
-     *
      * @param register 注册信息
      * @return Result
      * @see Register
@@ -60,14 +60,13 @@ public class UserController {
 
     /**
      * 验证token是否过期
-     *
      * @param request 请求
      * @return Result
      */
     @GetMapping("/checktoken")
     public R<Boolean> checktoken(HttpServletRequest request) {
         String token = request.getHeader(JWTConfig.tokenHeader);
-        return R.ok(userService.checkToken(token));
+        return R.ok(JWTUtil.verifyToken(token));
     }
 
     /**
@@ -75,7 +74,7 @@ public class UserController {
      * @param user 用户信息
      * @return Result
      */
-    @PreAuthorize("hasAnyRole('ROLE_admin','ROLE_user')")
+    @PreAuthorize("hasAnyAuthority('admin', 'USER')")
     @PostMapping("/update")
     public R<User> update(@RequestBody User user) {
         return userService.update(user);

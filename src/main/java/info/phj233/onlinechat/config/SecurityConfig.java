@@ -1,6 +1,5 @@
 package info.phj233.onlinechat.config;
 
-import info.phj233.onlinechat.evaluator.SelfPermissionEvaluatorImpl;
 import info.phj233.onlinechat.filter.JWTAuthenticationTokenFilter;
 import info.phj233.onlinechat.handler.*;
 import info.phj233.onlinechat.provider.AuthenticationProviderImpl;
@@ -16,7 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -37,12 +35,7 @@ public class SecurityConfig {
     private final AuthenticationProviderImpl authenticationProvider;
     private final JWTAuthenticationTokenFilter jwtAuthenticationTokenFilter;
     private final UserDetailsServiceImpl userDetailsService;
-    @Bean
-    public DefaultWebSecurityExpressionHandler userSecurityExpressionHandler() {
-        DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
-        handler.setPermissionEvaluator(new SelfPermissionEvaluatorImpl());
-        return handler;
-    }
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -78,10 +71,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/upload/**",
                                 "/login",
-                                "/user/register",
-                                "/user/info",
-                                "/user/checktoken",
-                        "/user/avatar").permitAll()
+                                "/user/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // security提交form表单请求的接口地址 默认是/login
@@ -98,7 +88,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
 
 
 }

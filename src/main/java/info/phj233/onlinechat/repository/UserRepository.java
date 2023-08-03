@@ -1,4 +1,4 @@
-package info.phj233.onlinechat.dao;
+package info.phj233.onlinechat.repository;
 
 import info.phj233.onlinechat.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserDao extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User>, PagingAndSortingRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User>, PagingAndSortingRepository<User, Integer> {
     User findUserByUsername(String username);
 
     List<User> findByRoleLike(String role);

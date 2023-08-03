@@ -28,7 +28,7 @@ public class AdminController {
         return R.ok(userRepository.findAll());
     }
 
-    @PreAuthorize("hasPermission('/admin/addUser', 'admin')")
+    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/addUser")
     public R<User> addUser(@RequestBody User user) {
         return userService.addUser(user);
