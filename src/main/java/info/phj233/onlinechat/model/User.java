@@ -8,8 +8,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 用户表
- * @TableName user
+ * 用户表(User)实体类
  */
 @Entity
 @Table(name="user")

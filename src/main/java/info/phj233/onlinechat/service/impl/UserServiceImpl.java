@@ -1,8 +1,6 @@
 package info.phj233.onlinechat.service.impl;
 
-import com.auth0.jwt.JWT;
-import info.phj233.onlinechat.config.JWTConfig;
-import info.phj233.onlinechat.dao.UserDao;
+import info.phj233.onlinechat.repository.UserRepository;
 import info.phj233.onlinechat.model.User;
 import info.phj233.onlinechat.model.UserDetailImpl;
 import info.phj233.onlinechat.model.value.Register;
@@ -25,18 +23,17 @@ import java.nio.file.FileSystems;
 
 
 /**
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.service.impl
- * @className: UserServiceImpl
- * @author: phj233
- * @date: 2023/3/10 9:50
- * @version: 1.0
+ * 用户服务实现类
+ * @author phj233
+ * @see UserService
+ * @since  2023/3/10 9:50
+ * @version 1.0
  */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     @Override
     public R<User> register(Register register) {
         if (register.username().isEmpty() || register.password().isEmpty()) {
@@ -49,7 +46,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
         user.setEmail(register.email());
         try {
-            user= userDao.saveAndFlush(user);
+            user= userRepository.saveAndFlush(user);
         } catch (Exception e) {
             log.error(e.getMessage());
             return R.error(E.USERNAME_ALREADY_EXIST);
@@ -59,12 +56,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public R<User> addUser(User user) {
-        if (userDao.findUserByUsername(user.getUsername()) != null) {
+        if (userRepository.findUserByUsername(user.getUsername()) != null) {
             return R.error(E.USERNAME_ALREADY_EXIST);
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         try {
-            user = userDao.saveAndFlush(user);
+            user = userRepository.saveAndFlush(user);
         } catch (Exception e) {
             log.error(e.getMessage());
             return R.error(E.ERROR, e.getMessage());
@@ -72,22 +69,15 @@ public class UserServiceImpl implements UserService {
         return R.ok(user);
 
     }
-    @Override
-    public Boolean checkToken(String token) {
-        if (token.startsWith(JWTConfig.tokenPrefix)){
-            token = token.replace(JWTConfig.tokenPrefix, "");
-        }
-        return JWT.decode(token).getExpiresAt().getTime() > System.currentTimeMillis();
-    }
 
     @Override
     public R<User> update(User user) {
-        if (StringUtils.hasText(user.getUsername()) || StringUtils.hasText(user.getPassword())) {
+        if (!StringUtils.hasText(user.getUsername()) || !StringUtils.hasText(user.getPassword())) {
             return R.error(E.USERNAME_PASSWORD_EMPTY);
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         try {
-            user = userDao.saveAndFlush(user);
+            user = userRepository.saveAndFlush(user);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -120,7 +110,7 @@ public class UserServiceImpl implements UserService {
                 String avatarPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/upload/avatar/" + avatarName;
                 user.setAvatar(avatarPath);
             }
-            User saved = userDao.saveAndFlush(user);
+            User saved = userRepository.saveAndFlush(user);
             return R.ok(saved);
         } catch (Exception e) {
             log.info(e.getMessage());
@@ -133,7 +123,7 @@ public class UserServiceImpl implements UserService {
         try{
             Sort sort = Sort.by(Sort.Direction.ASC, "uid");
             PageRequest pageRequest = PageRequest.of(page, size, sort);
-            Page<User> users = userDao.findAll(pageRequest);
+            Page<User> users = userRepository.findAll(pageRequest);
             return R.ok(users);
         }catch (Exception e){
             log.info(e.getMessage());

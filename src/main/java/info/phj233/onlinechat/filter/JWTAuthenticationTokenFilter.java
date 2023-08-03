@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.phj233.onlinechat.config.JWTConfig;
 import info.phj233.onlinechat.model.UserDetailImpl;
-import info.phj233.onlinechat.service.UserService;
 import info.phj233.onlinechat.service.impl.UserDetailsServiceImpl;
+import info.phj233.onlinechat.util.JWTUtil;
 import info.phj233.onlinechat.util.result.E;
 import info.phj233.onlinechat.util.result.R;
 import jakarta.servlet.FilterChain;
@@ -26,26 +26,23 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.filter
- * @className: JWTAuthenticationTokenFilter
- * @author: phj233
- * @date: 2023/3/11 12:03
- * @version: 1.0
+ * JWT认证过滤器
+ * @author phj233
+ * @since  2023/3/11 12:03
+ * @version 1.0
  */
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
-    private final UserService userService;
     private final ObjectMapper objectMapper;
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws IOException, ServletException {
         // 获取请求头中的token
         String jwt = request.getHeader(JWTConfig.tokenHeader);
         // 如果请求头中有token且开头为指定字符串
-        if (jwt != null && !jwt.equals("") && jwt.startsWith(JWTConfig.tokenPrefix)){
+        if (jwt != null && !jwt.isEmpty() && jwt.startsWith(JWTConfig.tokenPrefix)){
             // 截取JWT前缀
             String token = jwt.replace(JWTConfig.tokenPrefix, "");
             // 解析JWT 获取用户名、密码
@@ -59,7 +56,7 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
                 Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
                 if (!ObjectUtils.isEmpty(authorities)) {
                     //判断token是否有效
-                    if (!userService.checkToken(token)) {
+                    if (!JWTUtil.verifyToken(token)) {
                         log.info("token已过期");
                         response.setCharacterEncoding("UTF-8");
                         response.setContentType("application/json;charset=UTF-8");

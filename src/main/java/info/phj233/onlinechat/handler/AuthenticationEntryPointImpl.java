@@ -15,7 +15,7 @@ import java.io.IOException;
  * 用户未登录处理类
  * @author phj233
  * @since  2023/3/10 22:44
- * @version: 1.0
+ * @version 1.0
  */
 @Component
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {

@@ -18,12 +18,9 @@ import java.util.Collection;
 
 /**
  * 自定义登录验证类
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.provider
- * @className: AuthenticationProviderImpl
- * @author: phj233
- * @date: 2023/3/12 21:27
- * @version: 1.0
+ * @author phj233
+ * @since  2023/3/12 21:27
+ * @version 1.0
  */
 @Component
 @RequiredArgsConstructor

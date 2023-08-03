@@ -3,12 +3,10 @@ package info.phj233.onlinechat.config;
 import lombok.Data;
 
 /**
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.config
- * @className: JWTConfig
- * @author: phj233
- * @date: 2023/3/10 23:43
- * @version: 1.0
+ * JWT配置类
+ * @author phj233
+ * @since  2023/3/10 23:43
+ * @version 1.0
  */
 @Data
 public class JWTConfig {

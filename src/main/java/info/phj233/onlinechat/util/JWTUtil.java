@@ -12,12 +12,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 /**
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.util
- * @className: JWTUtil
- * @author: phj233
- * @date: 2023/3/10 23:55
- * @version: 1.0
+ * JWT 工具类
+ * @author phj233
+ * @since  2023/3/10 23:55
+ * @version 1.0
  */
 @NoArgsConstructor
 public class JWTUtil {
@@ -41,6 +39,17 @@ public class JWTUtil {
                 .sign(Algorithm.HMAC256(JWTConfig.secret));
     }
 
+
+    /**
+     * 验证token
+     * @param token token
+     */
+    public static Boolean verifyToken(String token) {
+        if (token.startsWith(JWTConfig.tokenPrefix)){
+            token = token.replace(JWTConfig.tokenPrefix, "");
+        }
+        return JWT.decode(token).getExpiresAt().getTime() > System.currentTimeMillis();
+    }
     /**
      * @deprecated
      */

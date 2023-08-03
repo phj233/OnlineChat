@@ -13,12 +13,9 @@ import java.io.IOException;
 
 /**
  * 暂无权限处理类
- * @projectName: OnlineChat
- * @package: info.phj233.onlinechat.handler
- * @className: AccessDeniedHandlerImpl
- * @author: phj233
- * @date: 2023/3/10 22:41
- * @version: 1.0
+ * @author phj233
+ * @since 2023/3/10 22:41
+ * @version 1.0
  */
 @Component
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {

@@ -10,7 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
 /**
- * 用户信息
+ * 自定义 UserDetails 实现类 <br>
+ * 用于 Spring Security 认证
  * @author phj233
  * @since  2023/3/21 23:06
  * @version 1.0
