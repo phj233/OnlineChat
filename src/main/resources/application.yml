@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: backend_sb3
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/backend_sb3?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: phj123456
+  main:
+    allow-bean-definition-overriding: true
+
+sa-token:
+  is-color-log: true
+  timeout: 604800
+  token-name: token
+  jwt-secret-key: phj123+-/
+  token-style: tik
+  is-log: true
+
+jimmer:
+  language: kotlin
+  pretty-sql: true
+  show-sql: true
+  client:
+    ts:
+      path: /ts.zip
+    openapi:
+      path: /openapi.yml
+      ui-path: /openapi.html
+      properties:
+        info:
+          title: My Web Service
+          description: |
+            Restore the DTO explosion that was 
+            eliminated by server-side developers
+          version: 1.0
+
