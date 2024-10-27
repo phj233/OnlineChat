@@ -1,0 +1,28 @@
+export top.phj233.backend_sb3.model.User
+
+UserLogin {
+    username
+    password
+    email
+}
+
+UserView{
+    #allScalars
+    -password
+    roles{
+        #allScalars
+    }
+}
+
+input UserRegister {
+    username
+    password
+    email
+}
+
+dynamic input UserUpdate {
+    #allScalars
+    roles{
+        #allScalars
+    }
+}

@@ -1,0 +1,18 @@
+export top.phj233.backend_sb3.ws.Message
+
+input WsMessage{
+    flat(sender) {
+        id as sender
+    }
+    content
+    time
+}
+
+WsMessageView{
+    #allScalars
+    -id
+    flat(sender) {
+        email
+        avatar
+    }
+}
